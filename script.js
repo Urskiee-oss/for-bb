@@ -28,8 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         heartContainer.style.pointerEvents = 'none';
     }
 
-    // Create particle effect at click position
-    function createParticles(x, y) {
+    // Create particle effect at click position relative to particleContainer
+    function createParticles(clientX, clientY) {
+        const rect = particleContainer.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
         const particleCount = 5 + Math.floor(Math.random() * 4); // 5-8 particles
 
         for (let i = 0; i < particleCount; i++) {
