@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import LandingScreen from "./components/LandingScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import GiftScreen from "./components/GiftScreen";

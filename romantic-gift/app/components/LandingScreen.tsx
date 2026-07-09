@@ -1,15 +1,28 @@
-import { MotionProps, motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Heart, Link, Mail, Sparkles } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Heart } from "lucide-react";
 
 interface Props {
   onContinue: () => void;
 }
 
 export default function LandingScreen({ onContinue }: Props) {
+  const [petals] = useState(() =>
+    Array.from({ length: 30 }, (_, index) => ({
+      id: index,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 20 + 10,
+      offsetY: -100 - Math.random() * 200,
+      duration: Math.random() * 5 + 5,
+    }))
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity:  , y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex flex-col items-center justify-center p-4"
@@ -19,37 +32,27 @@ export default function LandingScreen({ onContinue }: Props) {
         <motion.div
           className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-pink-100 to-purple-100 opacity-50"
         />
-        {/* Floating petals - using hearts for now, can be replaced with petal images */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(30)].map((_, i) => (
+          {petals.map((petal) => (
             <motion.span
-              key={i}
-              className="absolute text-[rem(24px)] text-pink-400/50"
+              key={petal.id}
+              className="absolute text-pink-400/50"
               style={{
-                left: Math.random() * 100 + "%",
-                top: Math.random() * 100 + "%",
-                fontSize: Math.random() * 20 + 10 + "px",
+                left: `${petal.left}%`,
+                top: `${petal.top}%`,
+                fontSize: `${petal.size}px`,
               }}
               initial={{ y: 0, opacity: 0 }}
               animate={{
-                y: -100 - Math.random() * 200,
+                y: petal.offsetY,
                 opacity: [0, 0.5, 0],
                 transition: {
-                  duration: Math.random() * 5 + 5,
+                  duration: petal.duration,
                   repeat: Infinity,
                   ease: "linear",
                 },
               }}
             >
-              {/* We'll use a flower emoji for petals, but ideally use an image */}
-              🌸
-            </motion.span>
-          ))}
-        </div>
-      </div>
-
-      {/* Main content */}
-              {/* For now, let's use a flower */}
               🌸
             </motion.span>
           ))}

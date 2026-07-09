@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
@@ -15,13 +17,11 @@ export default function GiftHeart({ gift }: Props) {
 
   // Create an array of "I Love You" strings to fill the heart
   const loveText = "I Love You ";
-  const repeatedText = loveText.repeat(100); // Adjust as needed
 
   useEffect(() => {
     // Optional: add interactive effects on mouse move
     const handleMouseMove = (e: MouseEvent) => {
       if (isReducedMotion) return;
-      const { clientX, clientY } = e;
       // We could create a ripple effect or move particles
       // For simplicity, we'll just log
     };

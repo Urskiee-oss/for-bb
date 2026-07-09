@@ -1,7 +1,32 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { CloudRain, Sun, HeartBreak } from "lucide-react";
+import { useState } from "react";
+import { CloudRain, Sun, Heart } from "lucide-react";
 
 export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
+  const [rain] = useState(() =>
+    Array.from({ length: 80 }, (_, index) => ({
+      id: index,
+      left: Math.random() * 100,
+      top: -Math.random() * 100,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+    }))
+  );
+
+  const [lightning] = useState(() =>
+    Array.from({ length: 3 }, (_, index) => ({
+      id: index,
+      left: Math.random() * 100,
+      top: -Math.random() * 100,
+      duration: Math.random() * 5 + 3,
+      delay: Math.random() * 5,
+      rotation: Math.random() * 360,
+      size: Math.random() * 10 + 5,
+    }))
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -10,39 +35,39 @@ export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
       className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4 text-white"
     >
       {/* Animated rainy background */}
-      <div className="absolute inset-0 pointer-none">
+      <div className="absolute inset-0 pointer-events-none">
         {/* Rain drops */}
-        <div className="absolute inset-0 pointer-none">
-          {[...Array(80)].map((_, i) => (
+        <div className="absolute inset-0 pointer-events-none">
+          {rain.map((drop) => (
             <div
-              key={i}
+              key={drop.id}
               className="absolute w-[2px] h-[20px] bg-blue-500/50"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `-${Math.random() * 100}%`,
-                animation: `fall ${Math.random() * 3 + 2}s linear infinite`,
-                animationDelay: `${Math.random() * 2}s`,
+                left: `${drop.left}%`,
+                top: `${drop.top}%`,
+                animation: `fall ${drop.duration}s linear infinite`,
+                animationDelay: `${drop.delay}s`,
               }}
-            ></div>
+            />
           ))}
         </div>
         {/* Occasional lightning */}
-        <div className="absolute inset-0 pointer-none" style={{ pointerEvents: "none" }}>
-          {[...Array(3)].map((_, i) => (
+        <div className="absolute inset-0 pointer-events-none" style={{ pointerEvents: "none" }}>
+          {lightning.map((bolt) => (
             <div
-              key={i}
+              key={bolt.id}
               className="absolute w-[2px] h-[20px] bg-yellow-400/50"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `-${Math.random() * 100}%`,
-                animation: `flash ${Math.random() * 5 + 3}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 5}s`,
-                transform: `rotate(${Math.random() * 360}deg)`,
-                width: `${Math.random() * 10 + 5}px`,
-                height: `${Math.random() * 10 + 5}px`,
+                left: `${bolt.left}%`,
+                top: `${bolt.top}%`,
+                animation: `flash ${bolt.duration}s ease-in-out infinite`,
+                animationDelay: `${bolt.delay}s`,
+                transform: `rotate(${bolt.rotation}deg)`,
+                width: `${bolt.size}px`,
+                height: `${bolt.size}px`,
                 borderRadius: "50%",
               }}
-            ></div>
+            />
           ))}
         </div>
       </div>

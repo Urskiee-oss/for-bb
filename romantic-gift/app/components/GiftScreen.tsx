@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Heart, Image, Mail, Sparkles } from "lucide-react";
+import { ArrowLeft, Heart, Mail } from "lucide-react";
 
 // We'll import the gift components
 import GiftNote from "./GiftNote";
@@ -12,44 +14,49 @@ import GiftHeart from "./GiftHeart";
 export default function GiftScreen() {
   const [openGiftId, setOpenGiftId] = useState<number | null>(null);
 
+  const noteGift = {
+    title: "Note",
+    description: "A cute sticky note with a sweet message",
+    content: "You make my heart smile every day. 💖",
+  };
+
+  const letterGift = {
+    title: "Letter",
+    description: "A romantic love letter with typewriter animation",
+    content: "My love for you grows stronger each day. You are my everything.",
+  };
+
+  const galleryGift = {
+    title: "Gallery",
+    description: "A collection of our favorite memories together",
+    content: "Placeholder for photos - you can add your own images here",
+  };
+
+  const thingsGift = {
+    title: "Things I Love About You",
+    description: "A list of all the things I adore about you",
+    content: [
+      "Your smile",
+      "Your kindness",
+      "Your sense of humor",
+      "The way you listen",
+      "Your beautiful heart",
+    ],
+  };
+
+  const heartGift = {
+    title: "Heart of Love",
+    description: "An animated heart made of 'I Love You' text",
+    content: "This will be rendered as a special canvas element",
+  };
+
   // Sample data - in a real app, this would come from a data file or props
   const gifts = [
-    {
-      id: 1,
-      title: "Note",
-      description: "A cute sticky note with a sweet message",
-      content: "You make my heart smile every day. 💖",
-    },
-    {
-      id: 2,
-      title: "Letter",
-      description: "A romantic love letter with typewriter animation",
-      content: "My love for you grows stronger each day. You are my everything.",
-    },
-    {
-      id: 3,
-      title: "Gallery",
-      description: "A collection of our favorite memories together",
-      content: "Placeholder for photos - you can add your own images here",
-    },
-    {
-      id: 4,
-      title: "Things I Love About You",
-      description: "A list of all the things I adore about you",
-      content: [
-        "Your smile",
-        "Your kindness",
-        "Your sense of humor",
-        "The way you listen",
-        "Your beautiful heart",
-      ],
-    },
-    {
-      id: 5,
-      title: "Heart of Love",
-      description: "An animated heart made of 'I Love You' text",
-      content: "This will be rendered as a special canvas element",
-    },
+    { id: 1, ...noteGift },
+    { id: 2, ...letterGift },
+    { id: 3, ...galleryGift },
+    { id: 4, ...thingsGift },
+    { id: 5, ...heartGift },
   ];
 
   return (
@@ -102,11 +109,11 @@ export default function GiftScreen() {
             <div className="h-full overflow-y-auto">
               {gifts.find((g) => g.id === openGiftId) && (
                 <>
-                  {openGiftId === 1 && <GiftNote gift={gifts[0]} />}
-                  {openGiftId === 2 && <GiftLetter gift={gifts[1]} />}
-                  {openGiftId === 3 && <GiftGallery gift={gifts[2]} />}
-                  {openGiftId === 4 && <GiftThings gift={gifts[3]} />}
-                  {openGiftId === 5 && <GiftHeart gift={gifts[4]} />}
+                  {openGiftId === 1 && <GiftNote gift={noteGift} />}
+                  {openGiftId === 2 && <GiftLetter gift={letterGift} />}
+                  {openGiftId === 3 && <GiftGallery gift={galleryGift} />}
+                  {openGiftId === 4 && <GiftThings gift={thingsGift} />}
+                  {openGiftId === 5 && <GiftHeart gift={heartGift} />}
                 </>
               )}
             </div>
@@ -124,7 +131,7 @@ export default function GiftScreen() {
                   key={gift.id}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: gift.index * 0.1 }}
+                  transition={{ delay: (gift.id - 1) * 0.1 }}
                   className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl cursor-pointer transform hover:scale-105 transition-transform duration-300"
                   onClick={() => setOpenGiftId(gift.id)}
                 >
@@ -153,7 +160,7 @@ export default function GiftScreen() {
                   <p className="text-gray-600 mb-4">{gift.description}</p>
                   {gift.title === "Things I Love About You" && (
                     <ul className="space-y-2 text-left text-sm">
-                      {gift.content
+                      {thingsGift.content
                         .slice(0, 3)
                         .map((item: string, index: number) => (
                           <li key={index} className="flex items-start">
@@ -196,9 +203,10 @@ export default function GiftScreen() {
 }
 
 // Envelope icon component (since lucide-react doesn't have an envelope by default in some versions)
-function Envelope() {
+function Envelope({ className }: { className?: string }) {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -216,9 +224,10 @@ function Envelope() {
 }
 
 // Image icon component (since lucide-react doesn't have an image by default in some versions)
-function Image() {
+function Image({ className }: { className?: string }) {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"

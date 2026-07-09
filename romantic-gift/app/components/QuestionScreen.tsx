@@ -1,5 +1,8 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { Heart, HeartBreak } from "lucide-react";
+import { Heart, HeartCrack } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   onYes: () => void;
@@ -7,6 +10,17 @@ interface Props {
 }
 
 export default function QuestionScreen({ onYes, onNo }: Props) {
+  const [hearts] = useState(() =>
+    Array.from({ length: 20 }, (_, index) => ({
+      id: index,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 20 + 10,
+      offsetY: -100 - Math.random() * 200,
+      duration: Math.random() * 5 + 5,
+    }))
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -17,21 +31,21 @@ export default function QuestionScreen({ onYes, onNo }: Props) {
       {/* Floating hearts background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(20)].map((_, i) => (
+          {hearts.map((heart) => (
             <motion.span
-              key={i}
-              className="absolute text-[rem(24px)] text-pink-400/50"
+              key={heart.id}
+              className="absolute text-pink-400/50"
               style={{
-                left: Math.random() * 100 + "%",
-                top: Math.random() * 100 + "%",
-                fontSize: Math.random() * 20 + 10 + "px",
+                left: `${heart.left}%`,
+                top: `${heart.top}%`,
+                fontSize: `${heart.size}px`,
               }}
               initial={{ y: 0, opacity: 0 }}
               animate={{
-                y: -100 - Math.random() * 200,
+                y: heart.offsetY,
                 opacity: [0, 0.5, 0],
                 transition: {
-                  duration: Math.random() * 5 + 5,
+                  duration: heart.duration,
                   repeat: Infinity,
                   ease: "linear",
                 },
@@ -68,7 +82,7 @@ export default function QuestionScreen({ onYes, onNo }: Props) {
             onClick={onNo}
             className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-xl shadow-md transform transition-all duration-200 hover:scale-105"
           >
-            <HeartBreak className="mr-2" /> No
+            <HeartCrack className="mr-2" /> No
           </motion.button>
         </div>
       </div>

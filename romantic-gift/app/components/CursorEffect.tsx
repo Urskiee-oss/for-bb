@@ -37,7 +37,7 @@ export default function CursorEffect() {
     // Only add the effect on certain pages if needed
     // For now, we'll add it everywhere
     document.addEventListener("mousedown", createHeart);
-    document.addEventListener("touchstart", (e: TouchEvent) => {
+    const handleTouchStart = (e: TouchEvent) => {
       // For touch devices
       const touch = e.touches[0];
       const mouseEvent = new MouseEvent("mousedown", {
@@ -45,11 +45,12 @@ export default function CursorEffect() {
         clientY: touch.clientY,
       });
       document.dispatchEvent(mouseEvent);
-    });
+    };
+    document.addEventListener("touchstart", handleTouchStart);
 
     return () => {
       document.removeEventListener("mousedown", createHeart);
-      document.removeEventListener("touchstart", (e: any) => {});
+      document.removeEventListener("touchstart", handleTouchStart);
     };
   }, [pathname]);
 

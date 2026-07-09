@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 
 export default function RomanticEffects() {
@@ -54,28 +56,28 @@ export default function RomanticEffects() {
     document.addEventListener("mousemove", createHeart);
     const sparkleInterval = setInterval(createSparkle, 300);
 
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
     // Cleanup
     return () => {
       document.removeEventListener("mousemove", createHeart);
       clearInterval(sparkleInterval);
+      style.remove();
     };
   }, []);
-
-  // Add keyframes for sparkle animation
-  const style = document.createElement("style");
-  style.textContent = `
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.7;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-  `;
-  document.head.appendChild(style);
 
   return null;
 }
