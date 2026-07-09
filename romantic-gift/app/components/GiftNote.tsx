@@ -29,7 +29,7 @@ export default function GiftNote({ gift }: Props) {
               className="text-gray-800 text-center leading-relaxed"
             >
               {gift.content}
-            </p>
+            </motion.p>
           </div>
         </div>
       </div>
