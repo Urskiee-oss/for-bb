@@ -11,6 +11,7 @@ export default function Home() {
   const [step, setStep] = useState<'landing' | 'question' | 'gift' | 'no'>(
     'landing'
   );
+  const [hasAvoidedQuestion, setHasAvoidedQuestion] = useState(false);
 
   const handleContinue = () => {
     setStep('question');
@@ -20,12 +21,13 @@ export default function Home() {
     setStep('gift');
   };
 
-  const handleNo = () => {
-    setStep('no');
-  };
-
   const handleTryAgain = () => {
     setStep('question');
+  };
+
+  const handleNo = () => {
+    setHasAvoidedQuestion(true);
+    setStep('no');
   };
 
   return (
@@ -38,7 +40,7 @@ export default function Home() {
           <QuestionScreen onYes={handleYes} onNo={handleNo} key="question" />
         )}
         {step === 'gift' && (
-          <GiftScreen key="gift" />
+          <GiftScreen hasAvoidedQuestion={hasAvoidedQuestion} key="gift" />
         )}
         {step === 'no' && (
           <NoScreen onTryAgain={handleTryAgain} key="no" />

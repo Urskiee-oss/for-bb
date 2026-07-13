@@ -46,8 +46,8 @@ export default function GiftHeart({ gift }: Props) {
               d="M200 330 C 170 300, 80 245, 80 160 C 80 110, 115 75, 162 75 C 185 75, 205 85, 220 105 C 235 85, 255 75, 278 75 C 325 75, 360 110, 360 160 C 360 245, 270 300, 200 330 Z"
             />
             <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f472b6" />
-              <stop offset="100%" stopColor="#db2777" />
+              <stop offset="0%" stopColor="#991b2b" />
+              <stop offset="100%" stopColor="#7a1f36" />
             </linearGradient>
           </defs>
 
@@ -85,7 +85,7 @@ export default function GiftHeart({ gift }: Props) {
           <motion.h3
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="text-xl font-bold text-pink-600"
+            className="text-xl font-bold text-red-700"
           >
             {gift.title}
           </motion.h3>

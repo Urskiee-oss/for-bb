@@ -19,7 +19,7 @@ export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
     >
       {/* Animated rainy background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(244,114,182,0.12),_transparent_35%),linear-gradient(180deg,_#0f172a_0%,_#111827_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(122,31,54,0.14),_transparent_35%),linear-gradient(180deg,_#0f172a_0%,_#111827_100%)]" />
         {/* Rain drops */}
         <div className="absolute inset-0 pointer-events-none">
           {rain.map((drop) => (
@@ -78,7 +78,7 @@ export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             onClick={onTryAgain}
-            className="mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-4 text-base font-semibold text-white shadow-[0_18px_50px_rgba(244,114,182,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
+            className="mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-red-700 to-[#7a1f36] px-6 py-4 text-base font-semibold text-white shadow-[0_18px_50px_rgba(122,31,54,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
           >
             <Heart className="h-5 w-5" /> Yes, try again
           </motion.button>

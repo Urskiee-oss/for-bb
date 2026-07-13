@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff7fb;
-  --foreground: #22172f;
+  --background: #fff6f5;
+  --foreground: #31131b;
 }
 
 @theme inline {
@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #fff7fb;
-    --foreground: #22172f;
+    --background: #fff6f5;
+    --foreground: #31131b;
   }
 }
 
@@ -26,9 +26,9 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(244, 114, 182, 0.18), transparent 28%),
-    radial-gradient(circle at top right, rgba(168, 85, 247, 0.12), transparent 24%),
-    linear-gradient(180deg, #fff8fd 0%, #f7f3ff 100%);
+    radial-gradient(circle at top left, rgba(153, 27, 43, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(122, 31, 54, 0.12), transparent 24%),
+    linear-gradient(180deg, #fff8f7 0%, #f6eceb 100%);
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", Arial, sans-serif;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 ::selection {
-  background: rgba(236, 72, 153, 0.18);
+  background: rgba(153, 27, 43, 0.18);
   color: var(--foreground);
 }
 
@@ -46,7 +46,7 @@ body {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(22px) saturate(1.2);
-  box-shadow: 0 24px 80px rgba(76, 29, 149, 0.14);
+  box-shadow: 0 24px 80px rgba(111, 29, 47, 0.14);
 }
 
 .glass-panel-dark {
@@ -60,15 +60,15 @@ body {
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 192, 203, 0.7);
+    box-shadow: 0 0 0 0 rgba(153, 27, 43, 0.7);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(255, 192, 203, 0);
+    box-shadow: 0 0 0 10px rgba(153, 27, 43, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 192, 203, 0);
+    box-shadow: 0 0 0 0 rgba(153, 27, 43, 0);
   }
 }
 

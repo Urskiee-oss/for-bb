@@ -1,119 +1,62 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Heart, Mail, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Props {
-  gift: {
-    title: string;
-    description: string;
-    content: string;
-  };
+  gift: { title: string; description: string; content: string };
 }
 
 export default function GiftLetter({ gift }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
 
-  // Simulate typewriter effect when the letter is opened
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
+    setTypedText("");
+    let characterIndex = 0;
+    const interval = setInterval(() => {
+      characterIndex += 1;
+      setTypedText(gift.content.slice(0, characterIndex));
+      if (characterIndex >= gift.content.length) clearInterval(interval);
+    }, 28);
 
-    let interval: ReturnType<typeof setInterval> | null = null;
-    const letters = gift.content.split("");
-    let i = 0;
-
-    interval = setInterval(() => {
-      setTypedText((prev) => prev + letters[i]);
-      i++;
-      if (i >= letters.length && interval) {
-        clearInterval(interval);
-      }
-    }, 50); // Adjust typing speed as needed
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
+    return () => clearInterval(interval);
   }, [isOpen, gift.content]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      <div className="relative">
-        {/* Envelope - closed */}
-        {!isOpen && (
-          <div
-            className="w-64 h-48 bg-red-500 rounded-lg shadow-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-300"
-            onClick={() => {
-              setTypedText("");
-              setIsOpen(true);
-            }}
-          >
-            <motion.div
-              className="text-white text-2xl"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              ✉️
-            </motion.div>
-          </div>
-        )}
-        {/* Letter - open */}
-        {isOpen && (
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-lg shadow-xl p-6"
-          >
-            {/* Letter content with typewriter effect */}
-            <div className="relative h-64 overflow-hidden">
-              <div
-                className="absolute inset-0 bg-white"
-                style={{
-                  // Mask for typewriter effect
-                  width: `${(typedText.length / gift.content.length) * 100}%`,
-                  transition: "width 0.1s linear",
-                }}
-              ></div>
-              <p className="text-gray-800 leading-relaxed p-2">
-                {typedText}
-              </p>
-            </div>
-            {/* Close button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => {
-                setIsOpen(false);
-                setTypedText("");
-              }}
-              className="mt-4 px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600 transition-colors"
-            >
-              Close Letter
-            </motion.button>
-          </motion.div>
-        )}
-      </div>
-
-      <div className="text-center">
-        <motion.h3
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="text-xl font-bold text-pink-600"
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-xl">
+      {!isOpen ? (
+        <motion.button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          whileHover={{ y: -6, rotate: -1 }}
+          whileTap={{ scale: 0.98 }}
+          className="relative mx-auto block w-full max-w-md overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#a5163d] via-[#8d1737] to-[#58142b] p-2 text-left shadow-[0_24px_55px_rgba(122,31,54,0.35)]"
         >
-          {gift.title}
-        </motion.h3>
-        <p className="text-gray-600">{gift.description}</p>
-      </div>
+          <div className="relative flex aspect-[1.55/1] items-center justify-center overflow-hidden rounded-[1.1rem] border border-white/15 bg-[#a51e44]">
+            <div className="absolute inset-x-0 top-0 h-[58%] origin-top border-x-[10rem] border-t-[7.5rem] border-x-transparent border-t-[#c04a68]" />
+            <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#8a1838] to-[#ad2d50]" />
+            <div className="absolute left-0 top-[45%] h-0 w-0 border-b-[5.5rem] border-l-[10rem] border-b-transparent border-l-[#ba3a5b]" />
+            <div className="absolute right-0 top-[45%] h-0 w-0 border-b-[5.5rem] border-r-[10rem] border-b-transparent border-r-[#ba3a5b]" />
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.35, type: "spring" }} className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#f8cad5] bg-rose-500 text-white shadow-lg">
+              <Heart className="h-7 w-7 fill-current" />
+            </motion.div>
+            <div className="absolute bottom-5 flex items-center gap-2 text-sm font-semibold tracking-wide text-white/90"><Mail className="h-4 w-4" /> Tap to open</div>
+          </div>
+        </motion.button>
+      ) : (
+        <motion.article initial={{ opacity: 0, rotateX: -14, y: 16 }} animate={{ opacity: 1, rotateX: 0, y: 0 }} className="relative overflow-hidden rounded-sm border border-rose-200 bg-[#fffdf9] px-7 py-9 shadow-[0_24px_55px_rgba(113,44,64,0.2)] sm:px-10">
+          <div className="absolute left-0 top-0 h-full w-1.5 bg-rose-300" />
+          <div className="absolute right-5 top-5 h-10 w-10 rounded-full border border-rose-200 bg-rose-50" />
+          <button type="button" aria-label="Close letter" onClick={() => setIsOpen(false)} className="absolute right-6 top-6 text-rose-400 transition hover:text-rose-700"><X className="h-5 w-5" /></button>
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-rose-500">A letter for you</p>
+          <div className="my-5 h-px bg-gradient-to-r from-rose-300 via-rose-100 to-transparent" />
+          <p className="min-h-28 font-serif text-lg leading-9 text-[#542435] sm:text-xl">{typedText}<span className="ml-0.5 inline-block h-5 w-px animate-pulse bg-rose-400 align-middle" /></p>
+          <p className="mt-8 text-right font-serif text-lg italic text-rose-600">Always yours</p>
+        </motion.article>
+      )}
     </motion.div>
   );
 }

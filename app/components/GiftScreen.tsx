@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle2, Heart, Mail, Lock } from "lucide-react";
+import { ArrowLeft, Heart, Lock, Mail } from "lucide-react";
 
 // We'll import the gift components
 import GiftNote from "./GiftNote";
@@ -13,10 +13,8 @@ import GiftHeart from "./GiftHeart";
 
 export default function GiftScreen() {
   const [openGiftId, setOpenGiftId] = useState<number | null>(null);
-  const [firstGiftUnlocked, setFirstGiftUnlocked] = useState(false);
-  const [showChallenge, setShowChallenge] = useState(false);
-  const [challengeAnswer, setChallengeAnswer] = useState("");
-  const [challengeError, setChallengeError] = useState("");
+  const [answeredGiftIds, setAnsweredGiftIds] = useState<number[]>([]);
+  const [currentGiftIndex, setCurrentGiftIndex] = useState(0);
 
   const noteGift = {
     title: "Note",
@@ -56,41 +54,21 @@ export default function GiftScreen() {
 
   // Sample data - in a real app, this would come from a data file or props
   const gifts = [
-    { id: 1, ...noteGift },
-    { id: 2, ...letterGift },
-    { id: 3, ...galleryGift },
-    { id: 4, ...thingsGift },
-    { id: 5, ...heartGift },
+    { id: 1, question: "What is one little thing that always makes you smile?", choices: ["Sweet messages", "Silly moments", "Time together"], ...noteGift },
+    { id: 2, question: "What is a memory of us that you love thinking about?", choices: ["Our first date", "Late-night talks", "An adventure together"], ...letterGift },
+    { id: 3, question: "What is one moment you would want us to relive together?", choices: ["A cozy evening", "A special trip", "A perfect date"], ...galleryGift },
+    { id: 4, question: "What is one thing you appreciate most about our relationship?", choices: ["Our support", "Our laughter", "Our connection"], ...thingsGift },
+    { id: 5, question: "In one word, how would you describe us?", choices: ["Home", "Magic", "Forever"], ...heartGift },
   ];
 
-  const openGift = (giftId: number) => {
-    if (giftId === 1 && !firstGiftUnlocked) {
-      setChallengeError("");
-      setChallengeAnswer("");
-      setShowChallenge(true);
-      return;
-    }
-
-    setOpenGiftId(giftId);
+  const unlockGift = (giftId: number) => {
+    setAnsweredGiftIds((currentIds) =>
+      currentIds.includes(giftId) ? currentIds : [...currentIds, giftId],
+    );
   };
 
-  const closeGift = () => {
-    setOpenGiftId(null);
-  };
-
-  const handleChallengeSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (challengeAnswer.trim() === "7") {
-      setFirstGiftUnlocked(true);
-      setShowChallenge(false);
-      setChallengeError("");
-      setOpenGiftId(1);
-      return;
-    }
-
-    setChallengeError("Not quite. Try again.");
-  };
+  const currentGift = gifts[currentGiftIndex];
+  const currentGiftIsUnlocked = answeredGiftIds.includes(currentGift.id);
 
   return (
     <motion.div
@@ -105,80 +83,7 @@ export default function GiftScreen() {
         <div className="absolute bottom-0 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-rose-200/20 blur-3xl" />
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 mx-auto mb-8 flex w-full max-w-5xl items-center justify-between gap-4 rounded-[1.75rem] px-2 py-2 sm:px-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-pink-500/80">
-            Curated collection
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            Your gifts
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-            Small pieces of the story, each wrapped in its own little mood.
-          </p>
-        </div>
-
-      </header>
-
-      {showChallenge && !firstGiftUnlocked ? (
-        <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.5, opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-md"
-        >
-          <motion.div
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="glass-panel relative w-full max-w-md rounded-[2rem] p-6 text-center sm:p-8"
-          >
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-100 text-pink-600">
-              <Lock className="h-6 w-6" />
-            </div>
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-pink-500/80">
-              Gift lock
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
-              Solve the challenge first
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
-              Answer this to open the first gift: what is 3 + 4?
-            </p>
-
-            <form onSubmit={handleChallengeSubmit} className="mt-6 space-y-4">
-              <input
-                value={challengeAnswer}
-                onChange={(event) => setChallengeAnswer(event.target.value)}
-                placeholder="Your answer"
-                className="w-full rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 text-center text-base text-slate-900 outline-none transition focus:border-pink-400 focus:ring-4 focus:ring-pink-200/60"
-              />
-              {challengeError && (
-                <p className="text-sm font-medium text-rose-600">{challengeError}</p>
-              )}
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)]"
-                >
-                  <CheckCircle2 className="h-4 w-4" /> Unlock Gift 1
-                </motion.button>
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowChallenge(false)}
-                  className="inline-flex flex-1 items-center justify-center rounded-2xl border border-slate-200 bg-white/80 px-5 py-3 text-sm font-semibold text-slate-700"
-                >
-                  Cancel
-                </motion.button>
-              </div>
-            </form>
-          </motion.div>
-        </motion.div>
-      ) : openGiftId ? (
+      {openGiftId ? (
         // Show the selected gift in a modal
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
@@ -195,7 +100,7 @@ export default function GiftScreen() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={closeGift}
+              onClick={() => setOpenGiftId(null)}
               className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-white"
             >
               <ArrowLeft className="h-4 w-4" /> Back
@@ -216,69 +121,54 @@ export default function GiftScreen() {
           </motion.div>
         </motion.div>
       ) : (
-        // Show the gift grid
-        <main className="flex-1 w-full">
-          {/* Gift Grid */}
-          <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {gifts.map((gift) => (
-              <motion.div
-                key={gift.id}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: (gift.id - 1) * 0.1 }}
-                className="group relative cursor-pointer overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/75 p-6 shadow-[0_18px_55px_rgba(76,29,149,0.12)] transition-transform duration-300 hover:-translate-y-1"
-                onClick={() => setOpenGiftId(gift.id)}
-              >
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-violet-400" />
-                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-pink-200/40 blur-2xl transition-transform duration-300 group-hover:scale-125" />
-                <div className="flex items-center justify-center mb-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-100 to-white shadow-inner">
-                    {gift.title === "Note" && (
-                      <Mail className="h-5 w-5 text-pink-500" />
-                    )}
-                    {gift.title === "Letter" && (
-                      <Envelope className="h-5 w-5 text-pink-500" />
-                    )}
-                    {gift.title === "Gallery" && (
-                      <GalleryIcon className="h-5 w-5 text-pink-500" />
-                    )}
-                    {gift.title === "Things I Love About You" && (
-                      <Heart className="h-5 w-5 text-pink-500" />
-                    )}
-                    {gift.title === "Heart of Love" && (
-                      <Heart className="h-5 w-5 text-pink-500" />
-                    )}
+        <main className="flex min-h-[calc(100vh-12rem)] w-full items-center justify-center">
+          <motion.section
+            key={currentGift.id}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative flex min-h-[calc(100vh-12rem)] w-full max-w-5xl flex-col justify-center overflow-hidden rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-[0_18px_55px_rgba(76,29,149,0.12)] sm:p-10"
+          >
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-violet-400" />
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-pink-200/40 blur-3xl" />
+            <div className="relative mx-auto w-full max-w-xl text-center">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-100 to-white shadow-inner">
+                {!currentGiftIsUnlocked && <Lock className="h-6 w-6 text-pink-500" />}
+                {currentGiftIsUnlocked && currentGift.title === "Note" && <Mail className="h-6 w-6 text-pink-500" />}
+                {currentGiftIsUnlocked && currentGift.title === "Letter" && <Envelope className="h-6 w-6 text-pink-500" />}
+                {currentGiftIsUnlocked && currentGift.title === "Gallery" && <GalleryIcon className="h-6 w-6 text-pink-500" />}
+                {currentGiftIsUnlocked && (currentGift.title === "Things I Love About You" || currentGift.title === "Heart of Love") && <Heart className="h-6 w-6 text-pink-500" />}
+              </div>
+
+              {!currentGiftIsUnlocked ? (
+                <div className="space-y-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-pink-500">Gift {currentGift.id} of {gifts.length}</p>
+                  <h2 className="text-2xl font-semibold leading-9 text-slate-900 sm:text-3xl">{currentGift.question}</h2>
+                  <div className="grid gap-3 pt-2">
+                    {currentGift.choices.map((choice) => (
+                      <motion.button
+                        key={choice}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => unlockGift(currentGift.id)}
+                        className="w-full rounded-2xl border border-pink-200 bg-white/85 px-5 py-4 text-base font-semibold text-slate-800 shadow-sm transition-colors hover:border-pink-400 hover:bg-pink-50"
+                      >
+                        {choice}
+                      </motion.button>
+                    ))}
                   </div>
                 </div>
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">
-                  {gift.title}
-                </h2>
-                <p className="mb-4 text-sm leading-7 text-slate-600">{gift.description}</p>
-                {gift.title === "Things I Love About You" && (
-                  <ul className="space-y-2 text-left text-sm text-slate-700">
-                    {thingsGift.content
-                      .slice(0, 3)
-                      .map((item: string, index: number) => (
-                        <li key={index} className="flex items-start">
-                          <Heart className="mt-1 h-4 w-4 flex-shrink-0 text-pink-400" />
-                          <span className="ml-2">{item}</span>
-                        </li>
-                      ))}
-                  </ul>
-                )}
-                <div className="mt-4">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => openGift(gift.id)}
-                    className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)] transition-transform duration-200 hover:-translate-y-0.5"
-                  >
-                    {gift.id === 1 && !firstGiftUnlocked ? "Unlock Gift" : "Open Gift"}
-                  </motion.button>
+              ) : (
+                <div className="space-y-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-emerald-600">Gift {currentGift.id} unlocked</p>
+                  <h2 className="text-3xl font-semibold text-slate-900 sm:text-4xl">{currentGift.title}</h2>
+                  <p className="text-base leading-8 text-slate-600">{currentGift.description}</p>
+                  {currentGift.title === "Things I Love About You" && <ul className="mx-auto max-w-sm space-y-2 text-left text-sm text-slate-700">{thingsGift.content.slice(0, 3).map((item: string, index: number) => <li key={index} className="flex items-start"><Heart className="mt-1 h-4 w-4 flex-shrink-0 text-pink-400" /><span className="ml-2">{item}</span></li>)}</ul>}
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setOpenGiftId(currentGift.id)} className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-5 py-4 text-base font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)]">Open Gift</motion.button>
+                  {currentGiftIndex < gifts.length - 1 && <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setCurrentGiftIndex((index) => index + 1)} className="w-full rounded-2xl border border-pink-200 bg-white/85 px-5 py-4 text-base font-semibold text-pink-600">Next gift</motion.button>}
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              )}
+            </div>
+          </motion.section>
         </main>
       )}
 
