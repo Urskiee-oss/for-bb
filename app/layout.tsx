@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Romantic Gift",
-  description: "A romantic digital gift for your special someone",
+  title: "for-bb",
+  description: "for-bb",
 };
 
 export default function RootLayout({

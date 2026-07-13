@@ -143,7 +143,7 @@ export default function LandingScreen({ onContinue }: Props) {
             A little surprise
           </p>
           <h1 className="mx-auto max-w-2xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
-            For my special someone
+            for-bb
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
             Open the heart to step into a tiny world of notes, memories, and
