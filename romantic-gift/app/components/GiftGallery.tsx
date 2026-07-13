@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface Props {
   gift: {
@@ -23,23 +24,30 @@ export default function GiftGallery({ gift }: Props) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
+      className="space-y-8"
     >
       <div className="space-y-4">
-        <div className="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           {images.map((src, index) => (
             <motion.div
               key={index}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
-              className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+              className="group relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-white/70 bg-white shadow-lg transition-transform duration-300 hover:-translate-y-1"
             >
-              <img
+              <Image
                 src={src}
                 alt={`Memory ${index + 1}`}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/60 via-slate-950/20 to-transparent p-4 text-left text-white">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/80">
+                  Memory {index + 1}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -53,7 +61,7 @@ export default function GiftGallery({ gift }: Props) {
         >
           {gift.title}
         </motion.h3>
-        <p className="text-gray-600">{gift.description}</p>
+        <p className="mx-auto max-w-xl text-slate-600">{gift.description}</p>
       </div>
     </motion.div>
   );

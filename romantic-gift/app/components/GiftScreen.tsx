@@ -64,21 +64,28 @@ export default function GiftScreen() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 flex flex-col items-center justify-center p-4"
+      className="relative isolate min-h-screen overflow-hidden px-4 py-10 text-slate-900"
     >
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-pink-300/18 blur-3xl" />
+        <div className="absolute right-0 top-1/4 h-80 w-80 rounded-full bg-violet-300/18 blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-rose-200/20 blur-3xl" />
+      </div>
+
       {/* Header */}
-      <header className="mb-8">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setOpenGiftId(null)} // Go back to gift grid
-          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </motion.button>
-        <h1 className="text-3xl font-bold text-pink-800 text-center">
-          Your Gifts
-        </h1>
+      <header className="relative z-10 mx-auto mb-8 flex w-full max-w-5xl items-center justify-between gap-4 rounded-[1.75rem] px-2 py-2 sm:px-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-pink-500/80">
+            Curated collection
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+            Your gifts
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+            Small pieces of the story, each wrapped in its own little mood.
+          </p>
+        </div>
+
       </header>
 
       {openGiftId ? (
@@ -87,26 +94,25 @@ export default function GiftScreen() {
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.5, opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-md"
         >
           <motion.div
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -100, opacity: 0 }}
-            className="relative w-full max-w-4xl h-full p-6"
+            className="glass-panel relative w-full max-w-4xl rounded-[2rem] p-4 sm:p-6"
           >
-            {/* Close button */}
             <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setOpenGiftId(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
+              className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-white"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-4 w-4" /> Back
             </motion.button>
 
             {/* Gift content */}
-            <div className="h-full overflow-y-auto">
+            <div className="max-h-[80vh] overflow-y-auto p-2 sm:p-4">
               {gifts.find((g) => g.id === openGiftId) && (
                 <>
                   {openGiftId === 1 && <GiftNote gift={noteGift} />}
@@ -123,66 +129,65 @@ export default function GiftScreen() {
         // Show the gift grid
         <main className="flex-1 w-full">
           {/* Gift Grid */}
-          <div className="grid gap-6 w-full max-w-4xl mx-auto">
-            {/* Grid layout: 1 column on mobile, 2 columns on tablet, 3 columns on desktop */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {gifts.map((gift) => (
-                <motion.div
-                  key={gift.id}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: (gift.id - 1) * 0.1 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl cursor-pointer transform hover:scale-105 transition-transform duration-300"
-                  onClick={() => setOpenGiftId(gift.id)}
-                >
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
-                      {gift.title === "Note" && (
-                        <Mail className="text-pink-500" />
-                      )}
-                      {gift.title === "Letter" && (
-                        <Envelope className="text-pink-500" />
-                      )}
-                      {gift.title === "Gallery" && (
-                        <Image className="text-pink-500" />
-                      )}
-                      {gift.title === "Things I Love About You" && (
-                        <Heart className="text-pink-500" />
-                      )}
-                      {gift.title === "Heart of Love" && (
-                        <Heart className="text-pink-500" />
-                      )}
-                    </div>
+          <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {gifts.map((gift) => (
+              <motion.div
+                key={gift.id}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: (gift.id - 1) * 0.1 }}
+                className="group relative cursor-pointer overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/75 p-6 shadow-[0_18px_55px_rgba(76,29,149,0.12)] transition-transform duration-300 hover:-translate-y-1"
+                onClick={() => setOpenGiftId(gift.id)}
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-400 via-fuchsia-400 to-violet-400" />
+                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-pink-200/40 blur-2xl transition-transform duration-300 group-hover:scale-125" />
+                <div className="flex items-center justify-center mb-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-100 to-white shadow-inner">
+                    {gift.title === "Note" && (
+                      <Mail className="h-5 w-5 text-pink-500" />
+                    )}
+                    {gift.title === "Letter" && (
+                      <Envelope className="h-5 w-5 text-pink-500" />
+                    )}
+                    {gift.title === "Gallery" && (
+                      <GalleryIcon className="h-5 w-5 text-pink-500" />
+                    )}
+                    {gift.title === "Things I Love About You" && (
+                      <Heart className="h-5 w-5 text-pink-500" />
+                    )}
+                    {gift.title === "Heart of Love" && (
+                      <Heart className="h-5 w-5 text-pink-500" />
+                    )}
                   </div>
-                  <h2 className="text-xl font-semibold text-pink-800 mb-2">
-                    {gift.title}
-                  </h2>
-                  <p className="text-gray-600 mb-4">{gift.description}</p>
-                  {gift.title === "Things I Love About You" && (
-                    <ul className="space-y-2 text-left text-sm">
-                      {thingsGift.content
-                        .slice(0, 3)
-                        .map((item: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <Heart className="flex-shrink-0 mt-1 text-pink-400" />
-                            <span className="ml-2">{item}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  )}
-                  <div className="mt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setOpenGiftId(gift.id)}
-                      className="w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
-                    >
-                      Open Gift
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                </div>
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">
+                  {gift.title}
+                </h2>
+                <p className="mb-4 text-sm leading-7 text-slate-600">{gift.description}</p>
+                {gift.title === "Things I Love About You" && (
+                  <ul className="space-y-2 text-left text-sm text-slate-700">
+                    {thingsGift.content
+                      .slice(0, 3)
+                      .map((item: string, index: number) => (
+                        <li key={index} className="flex items-start">
+                          <Heart className="mt-1 h-4 w-4 flex-shrink-0 text-pink-400" />
+                          <span className="ml-2">{item}</span>
+                        </li>
+                      ))}
+                  </ul>
+                )}
+                <div className="mt-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setOpenGiftId(gift.id)}
+                    className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)] transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    Open Gift
+                  </motion.button>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </main>
       )}
@@ -193,7 +198,7 @@ export default function GiftScreen() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center text-pink-600 font-medium"
+          className="mt-12 text-center font-medium text-pink-600"
         >
           Thank you for accepting my gifts. I love you more than words can say.
         </motion.div>
@@ -224,7 +229,7 @@ function Envelope({ className }: { className?: string }) {
 }
 
 // Image icon component (since lucide-react doesn't have an image by default in some versions)
-function Image({ className }: { className?: string }) {
+function GalleryIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}

@@ -3,39 +3,23 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { CloudRain, Sun, Heart } from "lucide-react";
+import { createFloatingDecorations } from "./deterministicDecorations";
 
 export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
-  const [rain] = useState(() =>
-    Array.from({ length: 80 }, (_, index) => ({
-      id: index,
-      left: Math.random() * 100,
-      top: -Math.random() * 100,
-      duration: Math.random() * 3 + 2,
-      delay: Math.random() * 2,
-    }))
-  );
+  const [rain] = useState(() => createFloatingDecorations(80, 3307));
 
-  const [lightning] = useState(() =>
-    Array.from({ length: 3 }, (_, index) => ({
-      id: index,
-      left: Math.random() * 100,
-      top: -Math.random() * 100,
-      duration: Math.random() * 5 + 3,
-      delay: Math.random() * 5,
-      rotation: Math.random() * 360,
-      size: Math.random() * 10 + 5,
-    }))
-  );
+  const [lightning] = useState(() => createFloatingDecorations(3, 4409));
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4 text-white"
+      className="relative isolate min-h-screen overflow-hidden px-4 py-10 text-white"
     >
       {/* Animated rainy background */}
       <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_bottom,_rgba(244,114,182,0.12),_transparent_35%),linear-gradient(180deg,_#0f172a_0%,_#111827_100%)]" />
         {/* Rain drops */}
         <div className="absolute inset-0 pointer-events-none">
           {rain.map((drop) => (
@@ -44,9 +28,10 @@ export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
               className="absolute w-[2px] h-[20px] bg-blue-500/50"
               style={{
                 left: `${drop.left}%`,
-                top: `${drop.top}%`,
+                top: `${drop.top * -1}%`,
                 animation: `fall ${drop.duration}s linear infinite`,
                 animationDelay: `${drop.delay}s`,
+                opacity: 0,
               }}
             />
           ))}
@@ -59,38 +44,45 @@ export default function NoScreen({ onTryAgain }: { onTryAgain: () => void }) {
               className="absolute w-[2px] h-[20px] bg-yellow-400/50"
               style={{
                 left: `${bolt.left}%`,
-                top: `${bolt.top}%`,
+                top: `${bolt.top * -1}%`,
                 animation: `flash ${bolt.duration}s ease-in-out infinite`,
                 animationDelay: `${bolt.delay}s`,
                 transform: `rotate(${bolt.rotation}deg)`,
                 width: `${bolt.size}px`,
                 height: `${bolt.size}px`,
                 borderRadius: "50%",
+                opacity: 0,
               }}
             />
           ))}
         </div>
       </div>
 
-      <div className="relative z-10 text-center space-y-6">
-        <div className="flex items-center justify-center space-x-4">
-          <CloudRain className="h-10 w-10 text-blue-400 animate-pulse" />
-          <h1 className="text-3xl font-bold">
-            Maybe you clicked the wrong button... 🥺
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-2xl items-center justify-center">
+        <div className="glass-panel-dark relative w-full rounded-[2rem] px-6 py-12 text-center sm:px-10 sm:py-14">
+          <div className="mb-6 flex items-center justify-center gap-4 text-sky-200">
+            <CloudRain className="h-10 w-10 animate-pulse" />
+            <Sun className="h-10 w-10 animate-pulse text-amber-300" />
+          </div>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-sky-200/80">
+            Wrong turn
+          </p>
+          <h1 className="mx-auto max-w-xl text-3xl font-semibold tracking-tight sm:text-5xl">
+            Maybe you clicked the wrong button...
           </h1>
-          <Sun className="h-10 w-10 text-yellow-400 animate-pulse" />
+          <p className="mx-auto mt-4 max-w-lg text-base leading-8 text-slate-200/90 sm:text-lg">
+            The story can still recover itself if you want to try again.
+          </p>
+
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={onTryAgain}
+            className="mt-10 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-4 text-base font-semibold text-white shadow-[0_18px_50px_rgba(244,114,182,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
+          >
+            <Heart className="h-5 w-5" /> Yes, try again
+          </motion.button>
         </div>
-        <p className="text-lg max-w-md">
-          Would you like to try again?
-        </p>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onTryAgain}
-          className="px-6 py-3 bg-pink-500 text-white rounded-xl shadow-md transform transition-all duration-200 hover:scale-105"
-        >
-          <Heart className="mr-2" /> Yes, Try Again
-        </motion.button>
       </div>
 
       {/* Animation keyframes */}
