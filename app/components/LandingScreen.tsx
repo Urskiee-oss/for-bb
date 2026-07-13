@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import { createFloatingDecorations } from "./deterministicDecorations";
@@ -9,89 +9,8 @@ interface Props {
   onContinue: () => void;
 }
 
-const FLORIDA_TIME_ZONE = "America/New_York";
-
-function getTargetDate() {
-  const now = new Date();
-  const targetDate = new Date(Date.UTC(now.getFullYear(), 6, 22, 4, 0, 0, 0));
-
-  if (now > targetDate) {
-    targetDate.setUTCFullYear(targetDate.getUTCFullYear() + 1);
-  }
-
-  return targetDate;
-}
-
-function getFloridaTimeLabel(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
-    timeZone: FLORIDA_TIME_ZONE,
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  }).format(date);
-}
-
-function getBrowserTimeZone() {
-  return Intl.DateTimeFormat().resolvedOptions().timeZone ?? "unknown";
-}
-
-function getTimeRemaining(targetDate: Date) {
-  const diff = targetDate.getTime() - Date.now();
-
-  if (diff <= 0) {
-    return {
-      isUnlocked: true,
-      days: 0,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-    };
-  }
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  return {
-    isUnlocked: false,
-    days,
-    hours,
-    minutes,
-    seconds,
-  };
-}
-
 export default function LandingScreen({ onContinue }: Props) {
   const [petals] = useState(() => createFloatingDecorations(30, 1201));
-  const [browserTimeZone] = useState(() => getBrowserTimeZone());
-  const [timeRemaining, setTimeRemaining] = useState(() =>
-    getTimeRemaining(getTargetDate())
-  );
-
-  useEffect(() => {
-    const updateTimer = () => {
-      setTimeRemaining(getTimeRemaining(getTargetDate()));
-    };
-
-    updateTimer();
-    const intervalId = window.setInterval(updateTimer, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, []);
-
-  const timerParts = useMemo(
-    () => [
-      { label: "Days", value: timeRemaining.days },
-      { label: "Hours", value: timeRemaining.hours },
-      { label: "Mins", value: timeRemaining.minutes },
-      { label: "Secs", value: timeRemaining.seconds },
-    ],
-    [timeRemaining]
-  );
 
   return (
     <motion.div
@@ -143,45 +62,22 @@ export default function LandingScreen({ onContinue }: Props) {
             A little surprise
           </p>
           <h1 className="mx-auto max-w-2xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
-            Happy Birthday, my love!
+            Happy Birthday, Honn!
           </h1>
 
           <div className="mt-10 flex items-center justify-center">
-            {timeRemaining.isUnlocked ? (
-              <motion.button
-                whileHover={{ scale: 1.06, rotate: [0, 10, 0, -10, 0] }}
-                whileTap={{ scale: 0.96 }}
-                onClick={onContinue}
-                className="group relative inline-flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-500 shadow-[0_20px_60px_rgba(236,72,153,0.35)] ring-8 ring-white/60 transition-shadow duration-300 hover:shadow-[0_26px_70px_rgba(236,72,153,0.42)]"
-              >
-                <Heart className="relative z-10 h-10 w-10 text-white transition-transform duration-300 group-hover:scale-110" />
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-white/25"
-                  style={{ animation: "pulse 2.2s infinite" }}
-                />
-              </motion.button>
-            ) : (
-              <div className="w-full max-w-2xl rounded-[1.75rem] border border-white/60 bg-white/60 px-5 py-6 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-pink-500/80">
-                  Opens {getFloridaTimeLabel(getTargetDate())}
-                </p>
-                <div className="mt-5 grid grid-cols-4 gap-3 sm:gap-4">
-                  {timerParts.map((part) => (
-                    <div
-                      key={part.label}
-                      className="rounded-2xl bg-slate-950/5 px-3 py-4 text-center"
-                    >
-                      <div className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                        {String(part.value).padStart(2, "0")}
-                      </div>
-                      <div className="mt-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-slate-500 sm:text-xs">
-                        {part.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <motion.button
+              whileHover={{ scale: 1.06, rotate: [0, 10, 0, -10, 0] }}
+              whileTap={{ scale: 0.96 }}
+              onClick={onContinue}
+              className="group relative inline-flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-500 shadow-[0_20px_60px_rgba(236,72,153,0.35)] ring-8 ring-white/60 transition-shadow duration-300 hover:shadow-[0_26px_70px_rgba(236,72,153,0.42)]"
+            >
+              <Heart className="relative z-10 h-10 w-10 text-white transition-transform duration-300 group-hover:scale-110" />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-white/25"
+                style={{ animation: "pulse 2.2s infinite" }}
+              />
+            </motion.button>
           </div>
 
           {/* Instructions */}
