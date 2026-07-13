@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Heart, Mail } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Heart, Mail, Lock } from "lucide-react";
 
 // We'll import the gift components
 import GiftNote from "./GiftNote";
@@ -13,6 +13,10 @@ import GiftHeart from "./GiftHeart";
 
 export default function GiftScreen() {
   const [openGiftId, setOpenGiftId] = useState<number | null>(null);
+  const [firstGiftUnlocked, setFirstGiftUnlocked] = useState(false);
+  const [showChallenge, setShowChallenge] = useState(false);
+  const [challengeAnswer, setChallengeAnswer] = useState("");
+  const [challengeError, setChallengeError] = useState("");
 
   const noteGift = {
     title: "Note",
@@ -59,6 +63,35 @@ export default function GiftScreen() {
     { id: 5, ...heartGift },
   ];
 
+  const openGift = (giftId: number) => {
+    if (giftId === 1 && !firstGiftUnlocked) {
+      setChallengeError("");
+      setChallengeAnswer("");
+      setShowChallenge(true);
+      return;
+    }
+
+    setOpenGiftId(giftId);
+  };
+
+  const closeGift = () => {
+    setOpenGiftId(null);
+  };
+
+  const handleChallengeSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (challengeAnswer.trim() === "7") {
+      setFirstGiftUnlocked(true);
+      setShowChallenge(false);
+      setChallengeError("");
+      setOpenGiftId(1);
+      return;
+    }
+
+    setChallengeError("Not quite. Try again.");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -88,7 +121,64 @@ export default function GiftScreen() {
 
       </header>
 
-      {openGiftId ? (
+      {showChallenge && !firstGiftUnlocked ? (
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.5, opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="glass-panel relative w-full max-w-md rounded-[2rem] p-6 text-center sm:p-8"
+          >
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-100 text-pink-600">
+              <Lock className="h-6 w-6" />
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-pink-500/80">
+              Gift lock
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+              Solve the challenge first
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Answer this to open the first gift: what is 3 + 4?
+            </p>
+
+            <form onSubmit={handleChallengeSubmit} className="mt-6 space-y-4">
+              <input
+                value={challengeAnswer}
+                onChange={(event) => setChallengeAnswer(event.target.value)}
+                placeholder="Your answer"
+                className="w-full rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 text-center text-base text-slate-900 outline-none transition focus:border-pink-400 focus:ring-4 focus:ring-pink-200/60"
+              />
+              {challengeError && (
+                <p className="text-sm font-medium text-rose-600">{challengeError}</p>
+              )}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)]"
+                >
+                  <CheckCircle2 className="h-4 w-4" /> Unlock Gift 1
+                </motion.button>
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowChallenge(false)}
+                  className="inline-flex flex-1 items-center justify-center rounded-2xl border border-slate-200 bg-white/80 px-5 py-3 text-sm font-semibold text-slate-700"
+                >
+                  Cancel
+                </motion.button>
+              </div>
+            </form>
+          </motion.div>
+        </motion.div>
+      ) : openGiftId ? (
         // Show the selected gift in a modal
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
@@ -105,7 +195,7 @@ export default function GiftScreen() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setOpenGiftId(null)}
+              onClick={closeGift}
               className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-white"
             >
               <ArrowLeft className="h-4 w-4" /> Back
@@ -180,10 +270,10 @@ export default function GiftScreen() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setOpenGiftId(gift.id)}
+                    onClick={() => openGift(gift.id)}
                     className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(236,72,153,0.25)] transition-transform duration-200 hover:-translate-y-0.5"
                   >
-                    Open Gift
+                    {gift.id === 1 && !firstGiftUnlocked ? "Unlock Gift" : "Open Gift"}
                   </motion.button>
                 </div>
               </motion.div>
