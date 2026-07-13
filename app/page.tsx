@@ -6,6 +6,7 @@ import LandingScreen from "./components/LandingScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import GiftScreen from "./components/GiftScreen";
 import NoScreen from "./components/NoScreen";
+import CountdownGate from "./components/CountdownGate";
 
 export default function Home() {
   const [step, setStep] = useState<'landing' | 'question' | 'gift' | 'no'>(
@@ -31,7 +32,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <CountdownGate>
       <AnimatePresence>
         {step === 'landing' && (
           <LandingScreen onContinue={handleContinue} key="landing" />
@@ -46,6 +47,6 @@ export default function Home() {
           <NoScreen onTryAgain={handleTryAgain} key="no" />
         )}
       </AnimatePresence>
-    </>
+    </CountdownGate>
   );
 }

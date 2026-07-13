@@ -6,30 +6,17 @@ import Image from "next/image";
 
 interface Props { gift: { title: string; description: string; content: string } }
 
-const memories = [
-  { src: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=60", label: "Our little moments", rotate: "-rotate-2" },
-  { src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=60", label: "Favorite smiles", rotate: "rotate-2" },
-  { src: "https://images.unsplash.com/photo-1526401276527-43d1e909544e?auto=format&fit=crop&w=800&q=60", label: "Worth remembering", rotate: "rotate-1" },
-  { src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=60", label: "Just us", rotate: "-rotate-1" },
-];
+const imageIds = ["1529626455594-4ff0802cfb7e", "1517841905240-472988babdf9", "1526401276527-43d1e909544e", "1519125323398-675f0ddb6308", "1516589178581-6cd7833ae3b2", "1506869640319-fe1a24fd76dc", "1516589178581-6cd7833ae3b2", "1520857014576-2c4f4c972b57", "1512316609839-ce289d3eba0a", "1524504388940-b1c1722653e1", "1512316609839-ce289d3eba0a", "1529156069898-49953e39b3ac", "1519741497674-611481863552", "1508214751196-bcfd4ca60f91", "1523438885200-e635ba2c371e", "1522673607200-164d1b6ce486", "1500648767791-00dcc994a43e", "1469571486292-0ba58a3f068b"];
+const captions = ["Our little moments", "Favorite smiles", "Worth remembering", "Just us", "A happy day", "Side by side", "A sweet memory", "My favorite view", "Always laughing", "A special place", "Together", "The little things", "A beautiful day", "More memories", "My happy place", "Us forever", "A moment to keep", "Love you"];
+const rotations = ["-rotate-2", "rotate-1", "-rotate-1", "rotate-2"];
 
 export default function GiftGallery({ gift }: Props) {
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-3xl">
-      <div className="mb-7 text-center">
-        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-rose-500"><Camera className="h-4 w-4" /> Our scrapbook</p>
-        <h3 className="mt-3 text-3xl font-semibold text-slate-900">{gift.title}</h3>
-        <p className="mt-2 text-slate-600">{gift.description}</p>
+    <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mx-auto w-full max-w-6xl py-2">
+      <div className="mb-8 text-center"><p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-rose-500"><Camera className="h-4 w-4" /> Our scrapbook</p><h3 className="mt-3 text-3xl font-semibold text-slate-900">{gift.title}</h3><p className="mt-2 text-slate-600">{gift.description}</p></div>
+      <div className="relative grid grid-cols-2 gap-3 rounded-[2rem] border border-rose-100 bg-rose-50/70 p-4 sm:grid-cols-3 sm:gap-5 sm:p-7 lg:grid-cols-4">
+        {imageIds.map((imageId, index) => { const label = captions[index]; return <motion.figure key={`${imageId}-${index}`} initial={{ opacity: 0, y: 16, rotate: 0 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ delay: index * 0.035 }} whileHover={{ y: -6, rotate: index % 2 ? 1 : -1, zIndex: 10 }} className={`relative overflow-hidden bg-white p-1.5 pb-8 shadow-[0_10px_22px_rgba(122,31,54,0.14)] sm:p-2 sm:pb-9 ${rotations[index % rotations.length]}`}><div className="relative aspect-square overflow-hidden"><Image src={`https://images.unsplash.com/photo-${imageId}?auto=format&fit=crop&w=600&q=70`} alt={label} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" /></div><figcaption className="absolute inset-x-0 bottom-0 flex h-8 items-center justify-center gap-1 px-1 text-center font-serif text-xs italic text-rose-700"><Heart className="h-3 w-3 shrink-0 fill-current" /> {label}</figcaption></motion.figure>; })}
       </div>
-      <div className="relative grid gap-5 rounded-[2rem] border border-rose-100 bg-rose-50/70 p-5 sm:grid-cols-2 sm:p-8">
-        <div className="absolute -left-3 top-10 h-16 w-16 rounded-full bg-pink-200/70 blur-2xl" />
-        {memories.map((memory, index) => (
-          <motion.figure key={memory.label} initial={{ opacity: 0, scale: 0.85, rotate: 0 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: index * 0.12 }} whileHover={{ y: -7, rotate: index % 2 ? 1 : -1 }} className={`relative overflow-hidden bg-white p-2 pb-10 shadow-[0_14px_30px_rgba(122,31,54,0.16)] ${memory.rotate}`}>
-            <div className="relative aspect-[4/3] overflow-hidden"><Image src={memory.src} alt={memory.label} fill sizes="(max-width: 640px) 100vw, 50vw" className="object-cover" /></div>
-            <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 pt-2 font-serif text-sm italic text-rose-700"><Heart className="h-3.5 w-3.5 fill-current" /> {memory.label}</figcaption>
-          </motion.figure>
-        ))}
-      </div>
-    </motion.div>
+    </motion.section>
   );
 }

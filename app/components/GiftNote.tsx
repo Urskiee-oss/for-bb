@@ -46,15 +46,15 @@ export default function GiftNote({ gift }: Props) {
               {gift.content}
             </p>
             <p className="mt-5 font-serif text-lg leading-8 text-[#5f2b3d] sm:text-xl sm:leading-9">
-              My love, being with you makes even the simplest days feel like
+              Babbyy, being with you makes even the simplest days feel like
               something worth keeping. Your laughter turns ordinary moments
               into my favorite memories, and your love feels like home to me.
               I am grateful for every little part of us, and I will keep
-              choosing you—today, tomorrow, and in every beautiful day that
+              choosing you today, tomorrow, and in every beautiful day that
               comes after.
             </p>
             <div className="mt-8 flex items-center justify-end gap-2 text-rose-500">
-              <span className="font-serif text-base italic">With all my love</span>
+              <span className="font-serif text-base italic">I lovee youu soo mucchh honn</span>
               <motion.div
                 animate={{ scale: [1, 1.15, 1] }}
                 transition={{ duration: 1.6, repeat: Infinity }}
