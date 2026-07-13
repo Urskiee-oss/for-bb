@@ -143,12 +143,8 @@ export default function LandingScreen({ onContinue }: Props) {
             A little surprise
           </p>
           <h1 className="mx-auto max-w-2xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
-            for-bb
+            Happy Birthday, my love!
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-            Open the heart to step into a tiny world of notes, memories, and
-            reasons I adore you.
-          </p>
 
           <div className="mt-10 flex items-center justify-center">
             {timeRemaining.isUnlocked ? (
@@ -169,9 +165,6 @@ export default function LandingScreen({ onContinue }: Props) {
                 <p className="text-xs font-semibold uppercase tracking-[0.35em] text-pink-500/80">
                   Opens {getFloridaTimeLabel(getTargetDate())}
                 </p>
-                <p className="mt-2 text-xs uppercase tracking-[0.28em] text-slate-500">
-                  Detected from your browser settings: {browserTimeZone}
-                </p>
                 <div className="mt-5 grid grid-cols-4 gap-3 sm:gap-4">
                   {timerParts.map((part) => (
                     <div
@@ -187,9 +180,6 @@ export default function LandingScreen({ onContinue }: Props) {
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-sm text-slate-600">
-                  The heart will appear once the countdown reaches zero.
-                </p>
               </div>
             )}
           </div>
