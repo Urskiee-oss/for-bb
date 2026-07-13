@@ -19,29 +19,29 @@ export default function GiftNote({ gift }: Props) {
       className="space-y-8 py-2"
     >
       <div className="relative mx-auto w-full max-w-lg px-3 sm:px-6">
-        <div className="absolute -left-1 top-12 h-32 w-32 rounded-full bg-rose-200/50 blur-3xl" />
-        <div className="absolute -right-1 bottom-8 h-32 w-32 rounded-full bg-pink-200/50 blur-3xl" />
+        <div className="absolute -left-1 top-12 h-32 w-32 rounded-full bg-red-200/50 blur-3xl" />
+        <div className="absolute -right-1 bottom-8 h-32 w-32 rounded-full bg-red-300/50 blur-3xl" />
 
         <motion.article
           initial={{ rotate: -2, scale: 0.94 }}
           animate={{ rotate: -1, scale: 1 }}
           transition={{ type: "spring", stiffness: 150, damping: 16 }}
-          className="relative overflow-hidden rounded-sm border border-rose-200/80 bg-[#fffaf7] px-7 py-10 shadow-[0_24px_50px_rgba(136,54,77,0.22)] sm:px-10"
+          className="relative overflow-hidden rounded-sm border border-red-200/80 bg-[#fffaf7] px-7 py-10 shadow-[0_24px_50px_rgba(136,54,77,0.22)] sm:px-10"
         >
-          <div className="absolute -left-6 -top-5 h-12 w-28 rotate-[-14deg] bg-rose-200/75 shadow-sm" />
-          <div className="absolute -right-6 -top-5 h-12 w-28 rotate-[14deg] bg-pink-200/75 shadow-sm" />
-          <div className="absolute inset-x-0 top-24 h-px bg-rose-100" />
-          <div className="absolute inset-x-0 top-36 h-px bg-rose-100" />
-          <div className="absolute inset-x-0 top-48 h-px bg-rose-100" />
+          <div className="absolute -left-6 -top-5 h-12 w-28 rotate-[-14deg] bg-red-200/75 shadow-sm" />
+          <div className="absolute -right-6 -top-5 h-12 w-28 rotate-[14deg] bg-red-300/75 shadow-sm" />
+          <div className="absolute inset-x-0 top-24 h-px bg-red-100" />
+          <div className="absolute inset-x-0 top-36 h-px bg-red-100" />
+          <div className="absolute inset-x-0 top-48 h-px bg-red-100" />
 
           <div className="relative">
-            <div className="flex items-center justify-between text-rose-500">
+            <div className="flex items-center justify-between text-red-600">
               <span className="text-xs font-semibold uppercase tracking-[0.28em]">
                 A little note
               </span>
               <Sparkles className="h-4 w-4" />
             </div>
-            <div className="my-6 h-px bg-gradient-to-r from-transparent via-rose-300 to-transparent" />
+            <div className="my-6 h-px bg-gradient-to-r from-transparent via-red-300 to-transparent" />
             <p className="font-serif text-lg leading-8 text-[#5f2b3d] sm:text-xl sm:leading-9">
               {gift.content}
             </p>
@@ -53,7 +53,7 @@ export default function GiftNote({ gift }: Props) {
               choosing you today, tomorrow, and in every beautiful day that
               comes after.
             </p>
-            <div className="mt-8 flex items-center justify-end gap-2 text-rose-500">
+            <div className="mt-8 flex items-center justify-end gap-2 text-red-600">
               <span className="font-serif text-base italic">I lovee youu soo mucchh honn</span>
               <motion.div
                 animate={{ scale: [1, 1.15, 1] }}

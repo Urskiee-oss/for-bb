@@ -15,7 +15,7 @@ export default function GiftThings({ gift }: Props) {
       className="mx-auto w-full max-w-2xl"
     >
       <div className="mb-7 text-center">
-        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-pink-500">
+        <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] text-red-600">
           <Sparkles className="h-4 w-4" /> A love list
         </p>
         <h3 className="mt-3 text-3xl font-semibold text-slate-900">{gift.title}</h3>
@@ -27,15 +27,15 @@ export default function GiftThings({ gift }: Props) {
             key={item}
             initial={{ opacity: 0, x: -18 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: Math.min(index * 0.025, 0.6) }}
             whileHover={{ x: 5 }}
-            className="flex items-center gap-4 rounded-2xl border border-pink-100 bg-gradient-to-r from-white to-rose-50/80 px-5 py-4 shadow-sm"
+            className="flex items-center gap-4 rounded-2xl border border-red-100 bg-gradient-to-r from-white to-red-50/80 px-5 py-4 shadow-sm"
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-sm font-bold text-rose-600">
-              0{index + 1}
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-100 text-sm font-bold text-red-600">
+              {String(index + 1).padStart(2, "0")}
             </span>
             <span className="flex-1 text-lg font-medium text-slate-800">{item}</span>
-            <Heart className="h-5 w-5 text-pink-400" />
+            <Heart className="h-5 w-5 text-red-500" />
           </motion.div>
         ))}
       </div>
